@@ -12,7 +12,15 @@
         }
 
         .new-important-element {
-            background-color: lrgb(255, 213, 0);
+            padding: 10px;
+            background-color: rgb(255, 183, 0);
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #000;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -21,7 +29,7 @@
     <div id="importantElement1" class="important-element">
         <span>
             🕶
-            <span>
+            <span id="importantElement1Text">
                 Это важный элемент 1. Не скрывай его случайно!
             </span>
         </span>
@@ -30,14 +38,23 @@
     <div id="importantElemenNext" class="important-element">
         <span>
             🕶
-            <span>
+            <span id="importantElement2Text">
                 Это важный элемент 2. Не скрывай его случайно!
             </span>
         </span>
     </div>
+    <div>
+        <button id="replaceButton1">Клонировать элемент и вставить его - removeChild + appendChild</button>
+        <br />
+        <button id="replaceButton2">Клонировать элемент и вставить его - replaceChild</button>
+        <br />
+        <button id="replaceButton3">Заменить id в исходном элементе</button>
+        <br />
+        <button id="replaceButton4">Заменить class в исходном элементе</button>
+        <br />
+        <button id="replaceButton5">Заменить текст в исходном элементе</button>
+    </div>
 
-    <button id="replaceButton1">Заменить элемент на подобный - removeChild + appendChild</button>
-    <button id="replaceButton2">Заменить элемент на подобный - replaceChild</button>
 
     <script>
         let id = 1;
@@ -45,6 +62,9 @@
 
         const replaceButton1 = document.getElementById('replaceButton1');
         const replaceButton2 = document.getElementById('replaceButton2');
+        const replaceButton3 = document.getElementById('replaceButton3');
+        const replaceButton4 = document.getElementById('replaceButton4');
+        const replaceButton5 = document.getElementById('replaceButton5');
 
         replaceButton1.addEventListener('click', () => {
             importantElement1 = document.getElementById(`importantElement${id}`);
@@ -80,6 +100,33 @@
 
             importantElement1.parentNode.replaceChild(clonedElement, importantElement1);
         });
+
+        replaceButton3.addEventListener('click', () => {
+            importantElement1 = document.getElementById(`importantElement${id}`);
+            console.log(`importantElement${id}`, importantElement1);
+
+            importantElement1.id = `importantElement${id + 1}`;
+            id++;
+        });
+
+        replaceButton4.addEventListener('click', () => {
+            importantElement1 = document.getElementById(`importantElement${id}`);
+            console.log(`importantElement${id}`, importantElement1);
+
+            importantElement1.classList.remove('important-element');
+            importantElement1.classList.add('new-important-element');
+
+        });
+
+        replaceButton5.addEventListener('click', () => {
+
+
+            const importantElement1Text = document.getElementById(`importantElement1Text`);
+            console.log(`importantElement1Text`, importantElement1Text);
+
+            importantElement1Text.textContent = 'Новый текст';
+        });
+
 
         // Создаем MutationObserver для отслеживания изменений стилей
         const observer = new MutationObserver((mutations) => {
