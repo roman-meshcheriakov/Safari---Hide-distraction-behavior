@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Восстановление скрытого элемента</title>
+    <style>
+        .important-element {
+            padding: 10px;
+            background-color: lightblue;
+        }
+
+        .new-important-element {
+            background-color: lrgb(255, 213, 0);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="importantElement1" class="important-element">
+        <span>
+            🕶
+            <span>
+                Это важный элемент 1. Не скрывай его случайно!
+            </span>
+        </span>
+
+    </div>
+    <div id="importantElemenNext" class="important-element">
+        <span>
+            🕶
+            <span>
+                Это важный элемент 2. Не скрывай его случайно!
+            </span>
+        </span>
+    </div>
+
+    <button id="replaceButton1">Заменить элемент на подобный - removeChild + appendChild</button>
+    <button id="replaceButton2">Заменить элемент на подобный - replaceChild</button>
+
+    <script>
+        let id = 1;
+        let importantElement1 = document.getElementById(`importantElement${id}`);
+
+        const replaceButton1 = document.getElementById('replaceButton1');
+        const replaceButton2 = document.getElementById('replaceButton2');
+
+        replaceButton1.addEventListener('click', () => {
+            importantElement1 = document.getElementById(`importantElement${id}`);
+            console.log(`importantElement${id}`, importantElement1);
+
+            const parentNode = importantElement1.parentNode;
+            console.log('parentNode', parentNode);
+
+            const clonedElement = importantElement1.cloneNode(true);
+            clonedElement.id = `importantElement${id + 1}`;
+            id++;
+
+            console.log('clonedElement', clonedElement);
+
+            clonedElement.style.display = 'block';
+
+            parentNode.removeChild(importantElement1);
+            parentNode.appendChild(clonedElement);
+
+        });
+
+        replaceButton2.addEventListener('click', () => {
+            importantElement1 = document.getElementById(`importantElement${id}`);
+            console.log(`importantElement${id}`, importantElement1);
+
+            const clonedElement = importantElement1.cloneNode(true);
+            clonedElement.id = `importantElement${id + 1}`;
+            id++;
+
+            console.log('clonedElement', clonedElement);
+
+            clonedElement.style.display = 'block';
+
+            importantElement1.parentNode.replaceChild(clonedElement, importantElement1);
+        });
+
+        // Создаем MutationObserver для отслеживания изменений стилей
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                console.log('mutation', mutation.type, mutation.target, mutation.addedNodes);
+            });
+        });
+
+        // Настраиваем наблюдатель на изменения атрибутов элемента
+        observer.observe(importantElement1, { attributes: true, childList: true, subtree: true });
+    </script>
+</body>
+
+</html>
